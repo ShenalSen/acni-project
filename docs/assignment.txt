@@ -1,0 +1,79 @@
+PUSL3130
+	Advanced Computing and 
+Networking Infrastructures 
+
+20 CREDIT MODULE
+
+ASSESSMENT: Refer coursework
+
+
+MODULE LEADER: Dr Bogdan Ghita
+
+MODULE AIMS
+
+•	To understand the concept and principles on virtualisation/softwarisation of computing and networking infrastructures in relation to cloud computing and the future Internet 
+•	To deploy and analyse the performance of Internet services (such as web, video conferencing and video streaming) over SDN/NFV/Cloud platforms. 
+•	To understand techniques for service provisioning, management, and performance improvement through automation, load balancing and resilience.  
+ 
+
+
+ASSESSED LEARNING OUTCOMES (ALO):
+
+•	Explain the concept of virtualization and/or softwarisation in cloud computing and advanced networking (the future Internet).
+•	Provision common services on virtual machines over SDN/NFV/Cloud platforms through automation or scripting
+•	Test and analyse performance based on load balancing and cache, under different networking conditions.
+
+					
+		 	 	 					
+ 
+Overview
+
+This document contains all the necessary information pertaining to the refer coursework assessment of PUSL3130 - Advanced Computing and Networking Infrastructures. 
+
+The sections that follow will detail the assessment tasks that are to be undertaken. The submission and expected feedback dates are presented in Table 1. All assessments are to be submitted electronically via the respective DLE module pages before the stated deadlines.
+
+	Submission Deadline	Feedback
+Coursework	9AM Sri Lanka time, 4:30AM UK time, 
+Tuesday 26th August 2025	20 working days
+Table 1: Assessment Deadlines
+
+This is an individual assessment.
+
+ 
+Briefing
+
+Adaptive Video Streaming is one of the most popular media services over the Internet, provided by many Over the Top (OTT) service providers such as YouTube, Netflix and Twitch. In this small project, you will set up a testbed based on DASH.js, Apache server and mininet, and further investigate how network conditions (e.g. different network bandwidth) affect end-to-end video streaming quality.
+Tasks
+The steps/tasks include:
+•	Deploy an edge server (e.g., Ubuntu VMs) with Nginx to host segmented video files and a central server to store the full video library for edge node access.
+•	Segment a sample video (e.g., Big Buck Bunny) into three H.264/AVC representations, generate an MPD file for DASH streaming, and upload the files to the central server and edge servers.
+•	Use Mininet to simulate a network with an edge region including an edge server, a central region connected to the central server, and client hosts accessing video streams under variable network conditions.
+•	Automate the Mininet testbed setup using a Python script, including topology design and bottleneck links to simulate bandwidth constraints.
+•	Deploy an SDN controller (e.g., Ryu or OpenDaylight) and develop an SDN application to monitor network performance (e.g., latency, bandwidth) and dynamically redirect video requests to the closest or least congested server.
+•	Conduct experiments by testing video streaming performance under varying network conditions, such as low/medium/high bandwidth, high traffic load, and redirection to edge servers.
+•	Measure performance metrics, including latency, bandwidth utilization, and DASH.js statistics (e.g., bitrate, dropped frames), and compare the impact of traffic redirection to edge servers versus the central server.
+•	Document results with evidence of experiments (e.g., screenshots, logs, statistics), analyze the effectiveness of edge computing and SDN, discuss limitations, and propose potential improvements.
+References:
+•	Dash Industry Forum github site 
+•	Mininet homepage
+•	MPEG-DASH Content Generation with MP4Box and x264 guide
+Deliverables and submission
+You are required to write a report and a produce a video demo recording to document the process. The report should be no more than 1,000 words (excluding diagrams, images, tables, references and appendix). The submission should be organised as follows:
+
+Report
+•	Abstract, Introduction, Conclusions and References - 20%
+•	Experiment/Testbed setup – 35%
+•	Experiments, Results and Analysis - 25%
+
+Video demo – 20%
+•	Record a video to demonstrate the implementation. The video should be maximum 15min long and must include fullscreen recording. 
+
+The report should have structure, i.e. it should contain table of contents, sections, and references. The Harvard referencing style is recommended. You should write your report as concisely as possible; it is important that you do not exceed or within 10% of the allowed word limit.
+
+Submission must be on DLE, one report file, Microsoft Word format, and one video.
+Assessment Criteria
+The assessment criteria is defined as below:
+•	Abstract, Introduction, Conclusions and References (20%)
+•	Testbed setup, code developed, and descriptions (35%)
+•	Experiments, Results and Analysis (25%)
+•	Video demo (20%)

@@ -116,6 +116,11 @@ class ACNIController(app_manager.RyuApp):
                 # Log traffic for monitoring
                 self.log_traffic_stats(ipv4_pkt.src, ipv4_pkt.dst)
                 
+                # Check if redirection is needed
+                if ipv4_pkt.dst == self.central_server:
+                    self.redirect_to_edge_server(datapath, ipv4_pkt, tcp_pkt, in_port)
+                    return  # Don't process further
+                
                 # Add higher priority flows for video traffic
                 parser = datapath.ofproto_parser
                 match = parser.OFPMatch(
@@ -161,6 +166,14 @@ class ACNIController(app_manager.RyuApp):
             
             self.add_flow(datapath, 20, match, actions)
             self.logger.info(f"Redirected {ipv4_pkt.src} from central to edge server")
+
+    def get_port_to_edge_server(self, datapath_id):
+        """Get port number to reach edge server from given switch"""
+        # This should be configured based on your topology
+        # For now, return a default port - you'll need to adjust based on your network
+        if datapath_id == 1:  # Main switch
+            return 2  # Port to edge network
+        return 1  # Default port
 
     def request_stats(self):
         """Request flow statistics from switches"""

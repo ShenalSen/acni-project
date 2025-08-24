@@ -161,3 +161,25 @@ class ACNIController(app_manager.RyuApp):
             
             self.add_flow(datapath, 20, match, actions)
             self.logger.info(f"Redirected {ipv4_pkt.src} from central to edge server")
+
+    def request_stats(self):
+        """Request flow statistics from switches"""
+        for dp in self.datapaths.values():
+            parser = dp.ofproto_parser
+            req = parser.OFPFlowStatsRequest(dp)
+            dp.send_msg(req)
+
+    @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
+    def flow_stats_reply_handler(self, ev):
+        """Handle flow statistics reply"""
+        flows = []
+        for stat in ev.msg.body:
+            flows.append({
+                'table_id': stat.table_id,
+                'match': stat.match,
+                'packet_count': stat.packet_count,
+                'byte_count': stat.byte_count
+            })
+        
+        # Log or save stats for analysis
+        self.logger.info(f"Flow stats: {len(flows)} flows")

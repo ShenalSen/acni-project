@@ -1,75 +1,53 @@
 #!/usr/bin/env python3
 """
-Mininet Topology for ACNI Project
-DASH Video Streaming with Edge Computing and SDN
+Simple Mininet Topology for ACNI Project
+DASH Video Streaming with Edge Computing
 """
 
 from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.cli import CLI
 from mininet.log import setLogLevel
-from mininet.link import TCLink
 
-class ACNITopology(Topo):
-    """Custom topology for ACNI project"""
+class SimpleACNITopology(Topo):
+    """Simple topology for ACNI project"""
     
     def build(self):
         # Add switches
-        central_switch = self.addSwitch('s1')
-        edge_switch = self.addSwitch('s2')
+        s1 = self.addSwitch('s1')
+        s2 = self.addSwitch('s2')
         
-        # Add hosts with shorter names
-        # Central server
-        central_server = self.addHost('h1', ip='10.0.1.10/24')
+        # Add hosts with simple IPs
+        h1 = self.addHost('h1', ip='192.168.1.10')  # Central server
+        h2 = self.addHost('h2', ip='192.168.2.10')  # Edge server
+        h3 = self.addHost('h3', ip='192.168.2.20')  # Client 1
+        h4 = self.addHost('h4', ip='192.168.2.21')  # Client 2
         
-        # Edge server
-        edge_server = self.addHost('h2', ip='10.0.2.10/24')
-        
-        # Client hosts
-        client1 = self.addHost('h3', ip='10.0.2.20/24')
-        client2 = self.addHost('h4', ip='10.0.2.21/24')
-        client3 = self.addHost('h5', ip='10.0.2.22/24')
-        
-        # Add links
-        # Connect servers to switches
-        self.addLink(central_server, central_switch, bw=100)  # 100 Mbps
-        self.addLink(edge_server, edge_switch, bw=50)         # 50 Mbps
-        
-        # Connect clients to edge switch
-        self.addLink(client1, edge_switch, bw=10)             # 10 Mbps
-        self.addLink(client2, edge_switch, bw=10)             # 10 Mbps  
-        self.addLink(client3, edge_switch, bw=10)             # 10 Mbps
-        
-        # Bottleneck link between switches (simulating WAN)
-        self.addLink(central_switch, edge_switch, bw=20, delay='50ms')  # 20 Mbps, 50ms delay
+        # Add simple links (no bandwidth limiting for now)
+        self.addLink(h1, s1)
+        self.addLink(h2, s2)
+        self.addLink(h3, s2)
+        self.addLink(h4, s2)
+        self.addLink(s1, s2)
 
 def run_topology():
-    """Run the topology with default controller"""
-    topo = ACNITopology()
+    """Run the simple topology"""
+    topo = SimpleACNITopology()
+    net = Mininet(topo=topo)
     
-    # Run without controller for basic testing
-    net = Mininet(topo=topo, 
-                  controller=None,
-                  link=TCLink,
-                  autoSetMacs=True)
-    
-    print("Starting network...")
+    print("Starting simple network...")
     net.start()
     
-    # Add basic flows manually for connectivity
-    print("Adding basic flows for connectivity...")
-    for switch in net.switches:
-        switch.cmd('ovs-ofctl add-flow {} "actions=normal"'.format(switch.name))
+    print("Network created!")
+    print("Central Server (h1): 192.168.1.10")
+    print("Edge Server (h2): 192.168.2.10") 
+    print("Clients: h3-h4 (192.168.2.20-21)")
     
-    print("Network topology created!")
-    print("Central Server (h1): 10.0.1.10")
-    print("Edge Server (h2): 10.0.2.10") 
-    print("Clients: h3-h5 (10.0.2.20-22)")
+    # Basic connectivity test
     print("\nTesting connectivity...")
-    
-    # Test basic connectivity
     net.pingAll()
     
+    print("\nStarting CLI (type 'help' for commands, 'exit' to quit)")
     CLI(net)
     net.stop()
 

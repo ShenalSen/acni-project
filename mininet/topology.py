@@ -6,7 +6,7 @@ DASH Video Streaming with Edge Computing and SDN
 
 from mininet.topo import Topo
 from mininet.net import Mininet
-from mininet.node import Controller, OVSController
+from mininet.node import Controller
 from mininet.cli import CLI
 from mininet.log import setLogLevel
 from mininet.link import TCLink
@@ -48,9 +48,9 @@ def run_topology():
     """Run the topology with default controller"""
     topo = ACNITopology()
     
-    # Use default controller for now (no SDN)
+    # Use default Controller instead of OVSController
     net = Mininet(topo=topo, 
-                  controller=OVSController,
+                  controller=Controller,
                   link=TCLink,
                   autoSetMacs=True)
     

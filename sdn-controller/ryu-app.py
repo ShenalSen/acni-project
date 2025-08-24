@@ -137,3 +137,27 @@ class ACNIController(app_manager.RyuApp):
             self.traffic_stats[key] = []
         
         self.traffic_stats[key].append(timestamp)
+
+    def redirect_to_edge_server(self, datapath, ipv4_pkt, tcp_pkt, in_port):
+        """Redirect traffic to edge server based on conditions"""
+        parser = datapath.ofproto_parser
+        ofproto = datapath.ofproto
+        
+        # Check if destination is central server and redirect to edge
+        if ipv4_pkt.dst == self.central_server:
+            # Modify destination IP to edge server
+            actions = [
+                parser.OFPActionSetField(ipv4_dst=self.edge_server),
+                parser.OFPActionOutput(self.get_port_to_edge_server(datapath.id))
+            ]
+            
+            match = parser.OFPMatch(
+                eth_type=ether_types.ETH_TYPE_IP,
+                ipv4_src=ipv4_pkt.src,
+                ipv4_dst=self.central_server,
+                ip_proto=6,
+                tcp_dst=80
+            )
+            
+            self.add_flow(datapath, 20, match, actions)
+            self.logger.info(f"Redirected {ipv4_pkt.src} from central to edge server")

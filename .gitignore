@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Video files
+*.mp4
+*.m4s
+*.webm
+*.avi
+
+# Results
+experiments/results/*.json
+experiments/results/*.csv
+experiments/results/*.log
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+temp/
+tmp/

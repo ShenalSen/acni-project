@@ -33,10 +33,15 @@ class SimpleACNITopology(Topo):
 def run_topology():
     """Run the simple topology"""
     topo = SimpleACNITopology()
-    net = Mininet(topo=topo)
+    net = Mininet(topo=topo, controller=None)
     
     print("Starting simple network...")
     net.start()
+    
+    # Add basic learning switch behavior
+    print("Configuring switches...")
+    for switch in net.switches:
+        switch.cmd('ovs-ofctl add-flow {} "actions=normal"'.format(switch.name))
     
     print("Network created!")
     print("Central Server (h1): 192.168.1.10")

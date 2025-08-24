@@ -9,7 +9,6 @@ venv/
 .venv/
 
 # Video files
-*.mp4
 *.m4s
 *.webm
 *.avi

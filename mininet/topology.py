@@ -6,7 +6,7 @@ DASH Video Streaming with Edge Computing and SDN
 
 from mininet.topo import Topo
 from mininet.net import Mininet
-from mininet.node import Controller, RemoteController
+from mininet.node import Controller, OVSController
 from mininet.cli import CLI
 from mininet.log import setLogLevel
 from mininet.link import TCLink
@@ -19,17 +19,17 @@ class ACNITopology(Topo):
         central_switch = self.addSwitch('s1')
         edge_switch = self.addSwitch('s2')
         
-        # Add hosts
+        # Add hosts with shorter names
         # Central server
-        central_server = self.addHost('central_server', ip='10.0.1.10/24')
+        central_server = self.addHost('h1', ip='10.0.1.10/24')
         
         # Edge server
-        edge_server = self.addHost('edge_server', ip='10.0.2.10/24')
+        edge_server = self.addHost('h2', ip='10.0.2.10/24')
         
         # Client hosts
-        client1 = self.addHost('client1', ip='10.0.2.20/24')
-        client2 = self.addHost('client2', ip='10.0.2.21/24')
-        client3 = self.addHost('client3', ip='10.0.2.22/24')
+        client1 = self.addHost('h3', ip='10.0.2.20/24')
+        client2 = self.addHost('h4', ip='10.0.2.21/24')
+        client3 = self.addHost('h5', ip='10.0.2.22/24')
         
         # Add links
         # Connect servers to switches
@@ -45,12 +45,12 @@ class ACNITopology(Topo):
         self.addLink(central_switch, edge_switch, bw=20, delay='50ms')  # 20 Mbps, 50ms delay
 
 def run_topology():
-    """Run the topology with SDN controller"""
+    """Run the topology with default controller"""
     topo = ACNITopology()
     
-    # Use remote controller (Ryu)
+    # Use default controller for now (no SDN)
     net = Mininet(topo=topo, 
-                  controller=RemoteController,
+                  controller=OVSController,
                   link=TCLink,
                   autoSetMacs=True)
     
@@ -58,9 +58,13 @@ def run_topology():
     net.start()
     
     print("Network topology created!")
-    print("Central Server: 10.0.1.10")
-    print("Edge Server: 10.0.2.10") 
-    print("Clients: 10.0.2.20-22")
+    print("Central Server (h1): 10.0.1.10")
+    print("Edge Server (h2): 10.0.2.10") 
+    print("Clients: h3-h5 (10.0.2.20-22)")
+    print("\nTesting connectivity...")
+    
+    # Test basic connectivity
+    net.pingAll()
     
     CLI(net)
     net.stop()

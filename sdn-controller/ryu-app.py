@@ -111,14 +111,21 @@ class ACNIController(app_manager.RyuApp):
         """Handle video streaming traffic redirection"""
         ipv4_pkt = pkt.get_protocol(ipv4.ipv4)
         if ipv4_pkt:
-            # Check if this is HTTP traffic (port 80) - video streaming
             tcp_pkt = pkt.get_protocol(tcp.tcp)
             if tcp_pkt and tcp_pkt.dst_port == 80:
                 # Log traffic for monitoring
                 self.log_traffic_stats(ipv4_pkt.src, ipv4_pkt.dst)
                 
-                # Implement load balancing logic here
-                # For now, simple logging
+                # Add higher priority flows for video traffic
+                parser = datapath.ofproto_parser
+                match = parser.OFPMatch(
+                    eth_type=ether_types.ETH_TYPE_IP,
+                    ipv4_dst=ipv4_pkt.dst,
+                    ip_proto=6,  # TCP
+                    tcp_dst=80
+                )
+                self.add_flow(datapath, 10, match, actions)  # Higher priority
+                
                 self.logger.info(f"Video traffic from {ipv4_pkt.src} to {ipv4_pkt.dst}")
 
     def log_traffic_stats(self, src, dst):
